@@ -1,0 +1,110 @@
+{
+	"name": "custom-command-runner",
+	"displayName": "Custom Command Runner",
+	"description": "Run node script file, methods and shell commands from command pallet",
+	"version": "1.0.0",
+	"engines": {
+		"vscode": "^1.67.0"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Sivaraman",
+		"email": "sendmsg2siva@gmail.com"
+	},
+	"keywords": [
+		"custom command runner",
+		"method runner",
+		"javascript runner",
+		"javascript method runner",
+		"script runner",
+		"node method runner",
+		"function runner",
+		"execute method",
+		"execute shell commands",
+		"shell command runner",
+		"shell script runner",
+		"vscode method runner"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/R35007/custom-command-runner-vscode-extension"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:custom-command-runner.openCustomCommands",
+		"onCommand:custom-command-runner.runCustomCommands"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "custom-command-runner.openCustomCommands",
+				"title": "Open Command Pallet",
+				"category": "Custom Commands"
+			},
+			{
+				"command": "custom-command-runner.runCustomCommands",
+				"title": "Run File",
+				"category": "Custom Commands"
+			}
+		],
+		"configuration": {
+			"title": "Custom Commands",
+			"properties": {
+				"custom-command-runner.settings.scriptsPath": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"additionalItems": true,
+					"description": "set custom folder and files to pick custom commands to run"
+				},
+				"custom-command-runner.settings.showInfoMsg": {
+					"type": "boolean",
+					"default": true,
+					"description": "Change this to false if you don't want to show information pop up messages."
+				}
+			}
+		},
+		"menus": {
+			"explorer/context": [
+				{
+					"when": "resourceExtname == .js",
+					"command": "custom-command-runner.runCustomCommands",
+					"group": "custom-command-runner"
+				}
+			],
+			"editor/context": [
+				{
+					"when": "resourceExtname == .js",
+					"command": "custom-command-runner.runCustomCommands",
+					"group": "custom-command-runner"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.67.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.0",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.16.0",
+		"@typescript-eslint/parser": "^5.16.0",
+		"eslint": "^8.11.0",
+		"glob": "^7.2.0",
+		"mocha": "^9.2.2",
+		"typescript": "^4.5.5",
+		"@vscode/test-electron": "^2.1.3"
+	}
+}
