@@ -3,6 +3,7 @@
 	"displayName": "Custom Command Runner",
 	"description": "Run node script file, methods and shell commands from command pallet",
 	"version": "1.0.0",
+	"publisher": "Thinker",
 	"engines": {
 		"vscode": "^1.67.0"
 	},
