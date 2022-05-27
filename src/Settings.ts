@@ -16,6 +16,9 @@ export class Settings {
   static get showInfoMsg() {
     return Settings.getSettings("showInfoMsg") as boolean;
   }
+  static get runFileFormat() {
+    return Settings.getSettings("runFileFormat") as boolean;
+  }
   static set showInfoMsg(val: boolean) {
     Settings.setSettings("showInfoMsg", val);
   }

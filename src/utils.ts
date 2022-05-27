@@ -2,8 +2,31 @@ import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 
-export const getEditorProps = () => {
+export const getVariables = (args: any) => {
+  const file = args?.fsPath;
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath || "./";
+  const pathDetail = file ? path.parse(file) : {} as any;
+
+  const variables = {
+    workspaceFolder,
+    workspaceFolderBasename: path.basename(workspaceFolder),
+    file,
+    fileWorkspaceFolder: workspaceFolder,
+    relativeFile: file ? path.relative(workspaceFolder, file) : undefined,
+    relativeFileDirname: pathDetail.dir ? path.basename(pathDetail.dir) : undefined,
+    fileBasename: pathDetail.base,
+    fileBasenameNoExtension: pathDetail.name,
+    fileDirname: pathDetail.dir,
+    fileExtname: pathDetail.ext,
+    pathSeparator: "/"
+  }
+
+  return variables
+}
+
+export const getEditorProps = (args: any) => {
   const editor = vscode.window.activeTextEditor;
+  const variables = getVariables(args)
   if (editor) {
     const document = editor.document;
     const selection = editor.selection;
@@ -12,9 +35,9 @@ export const getEditorProps = () => {
     const textRange = new vscode.Range(firstLine.range.start, lastLine.range.end);
     const editorText = document.getText(textRange);
     const selectedText = document.getText(selection);
-    return { editor, document, selection, textRange, editorText, selectedText };
+    return { editor, document, selection, textRange, editorText, selectedText, variables };
   }
-  return false;
+  return { variables };
 };
 
 export const getFilesList = (directoryPath: string, foldersToExclude: string[] = [], recursive: boolean = true): PathDetails[] => {
@@ -45,10 +68,24 @@ export const getStats = (directoryPath: string): PathDetails | undefined => {
   return { fileName, extension, filePath: directoryPath, isFile: stats.isFile(), isDirectory: stats.isDirectory() };
 };
 
-export const executeShellCommand = (terminalName: string = "Custom Command", commands: string[] = []) => {
+export const executeShellCommand = (terminalName: string = "Custom Command", commands: string[] = [], variables: object = {}) => {
   const terminal = vscode.window.createTerminal({ name: terminalName });
-  commands.forEach(command => { terminal.sendText(command) })
+  commands.forEach(command => {
+    const interpolatedCommand = interpolate(command, variables).replace(/undefined/g, "");
+    terminal.sendText(interpolatedCommand)
+  })
   terminal.show();
+};
+
+export const interpolate = (format: string = "", object: object = {}) => {
+  try {
+    const keys = Object.keys(object);
+    const values = Object.values(object);
+    return new Function(...keys, `return \`${format}\`;`)(...values);
+  } catch (error) {
+    console.log(error);
+    return format;
+  }
 };
 
 export type PathDetails = {
@@ -58,3 +95,5 @@ export type PathDetails = {
   isFile: boolean;
   isDirectory: boolean;
 };
+
+

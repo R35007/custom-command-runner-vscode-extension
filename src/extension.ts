@@ -22,13 +22,17 @@ const executeCustomCommand = async (scriptFilePath?: string, args?: any) => {
 
   if (!scriptFilePath) return;
 
+  const editorProps = getEditorProps(args);
+  editorProps.variables.file = scriptFilePath.replace(/\\/g, "/");
+
+
   const [commandName, command] = await Prompt.pickACommand(scriptFilePath, output) || [];
   if (!command) return;
 
   if (typeof command === "string") {
     try {
       output.appendLine(`Started executing ${commandName}...`);
-      executeShellCommand(commandName, command.split(";"));
+      executeShellCommand(commandName, command.split(";"), editorProps.variables);
       output.appendLine(`${commandName} executed successfully !`);
     } catch (error: any) {
       output.appendLine(error.message);
@@ -39,7 +43,6 @@ const executeCustomCommand = async (scriptFilePath?: string, args?: any) => {
   if (typeof command === "function") {
     try {
       output.appendLine(`Started executing ${commandName}...`);
-      const editorProps = getEditorProps() || {};
       await command(vscode, args, editorProps, output);
       output.appendLine(`${commandName} executed successfully !`);
     } catch (error: any) {

@@ -2,8 +2,9 @@
 	"name": "custom-command-runner",
 	"displayName": "Custom Command Runner",
 	"description": "Run node script file, methods and shell commands from command pallet",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"publisher": "Thinker",
+	"icon": "images/ccrLogo.png",
 	"engines": {
 		"vscode": "^1.67.0"
 	},
@@ -42,12 +43,12 @@
 		"commands": [
 			{
 				"command": "custom-command-runner.openCustomCommands",
-				"title": "Open Command Pallet",
+				"title": "Open Custom Command Pallet",
 				"category": "Custom Commands"
 			},
 			{
 				"command": "custom-command-runner.runCustomCommands",
-				"title": "Run File",
+				"title": "Run Custom Commands",
 				"category": "Custom Commands"
 			}
 		],
@@ -67,20 +68,23 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Change this to false if you don't want to show information pop up messages."
+				},
+				"custom-command-runner.settings.runFileFormat": {
+					"type": "string",
+					"default": "node ${file}",
+					"description": "Provide your shell command here to run the current file"
 				}
 			}
 		},
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "resourceExtname == .js",
 					"command": "custom-command-runner.runCustomCommands",
 					"group": "custom-command-runner"
 				}
 			],
 			"editor/context": [
 				{
-					"when": "resourceExtname == .js",
 					"command": "custom-command-runner.runCustomCommands",
 					"group": "custom-command-runner"
 				}

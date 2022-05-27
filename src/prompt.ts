@@ -103,7 +103,7 @@ export class Prompt {
         return;
       };
 
-      const command = selectedCommand.label === RUN_FILE ? [RUN_FILE, `node ${scriptFilePath.replace(/\\/g, "/")}`] : [selectedCommand.label, selectedCommand.value];
+      const command = selectedCommand.label === RUN_FILE ? [RUN_FILE, Settings.runFileFormat] : [selectedCommand.label, selectedCommand.value];
 
       output.appendLine(`Selected Command: ${[command[0]]}`);
 
