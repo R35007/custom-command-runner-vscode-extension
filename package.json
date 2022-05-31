@@ -2,7 +2,7 @@
 	"name": "custom-command-runner",
 	"displayName": "Custom Command Runner",
 	"description": "Run node script file, methods and shell commands from command pallet",
-	"version": "2.0.0",
+	"version": "3.0.0",
 	"publisher": "Thinker",
 	"icon": "images/ccrLogo.png",
 	"engines": {
@@ -55,7 +55,7 @@
 		"configuration": {
 			"title": "Custom Commands",
 			"properties": {
-				"custom-command-runner.settings.scriptsPath": {
+				"custom-command-runner.settings.paths": {
 					"type": "array",
 					"items": {
 						"type": "string"
@@ -64,14 +64,9 @@
 					"additionalItems": true,
 					"description": "set custom folder and files to pick custom commands to run"
 				},
-				"custom-command-runner.settings.showInfoMsg": {
-					"type": "boolean",
-					"default": true,
-					"description": "Change this to false if you don't want to show information pop up messages."
-				},
-				"custom-command-runner.settings.runFileFormat": {
+				"custom-command-runner.settings.runFileCommand": {
 					"type": "string",
-					"default": "node ${file}",
+					"default": "node ${currentFile}",
 					"description": "Provide your shell command here to run the current file"
 				}
 			}

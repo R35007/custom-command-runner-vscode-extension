@@ -2,14 +2,15 @@ import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 
-export const getVariables = (args: any) => {
-  const file = args?.fsPath;
+export const getVariables = (filePath?: string) => {
+  const file = filePath;
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath || "./";
   const pathDetail = file ? path.parse(file) : {} as any;
 
   const variables = {
     workspaceFolder,
     workspaceFolderBasename: path.basename(workspaceFolder),
+    currentFile: undefined,
     file,
     fileWorkspaceFolder: workspaceFolder,
     relativeFile: file ? path.relative(workspaceFolder, file) : undefined,
@@ -26,7 +27,6 @@ export const getVariables = (args: any) => {
 
 export const getEditorProps = (args: any) => {
   const editor = vscode.window.activeTextEditor;
-  const variables = getVariables(args)
   if (editor) {
     const document = editor.document;
     const selection = editor.selection;
@@ -35,9 +35,10 @@ export const getEditorProps = (args: any) => {
     const textRange = new vscode.Range(firstLine.range.start, lastLine.range.end);
     const editorText = document.getText(textRange);
     const selectedText = document.getText(selection);
+    const variables = getVariables(document.fileName);
     return { editor, document, selection, textRange, editorText, selectedText, variables };
   }
-  return { variables };
+  return { variables: getVariables(args?.fsPath) };
 };
 
 export const getFilesList = (directoryPath: string, foldersToExclude: string[] = [], recursive: boolean = true): PathDetails[] => {
@@ -95,5 +96,14 @@ export type PathDetails = {
   isFile: boolean;
   isDirectory: boolean;
 };
+
+export enum CommandTypes {
+  FILE,
+  SHELL,
+  FUNCTIONAL
+}
+
+export const BROWSE_FILE = "Browse File";
+
 
 

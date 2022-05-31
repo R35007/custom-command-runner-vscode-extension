@@ -10,16 +10,10 @@ export class Settings {
   static setSettings(key: string, val: any, isGlobal = true) {
     return Settings.configuration.update(key, val, isGlobal);
   }
-  static get scriptsPath() {
-    return (Settings.getSettings("scriptsPath") as string[]) || [];
+  static get paths() {
+    return (Settings.getSettings("paths") as string[]) || [];
   }
-  static get showInfoMsg() {
-    return Settings.getSettings("showInfoMsg") as boolean;
-  }
-  static get runFileFormat() {
-    return Settings.getSettings("runFileFormat") as boolean;
-  }
-  static set showInfoMsg(val: boolean) {
-    Settings.setSettings("showInfoMsg", val);
+  static get runFileCommand() {
+    return Settings.getSettings("runFileCommand") as boolean;
   }
 }
