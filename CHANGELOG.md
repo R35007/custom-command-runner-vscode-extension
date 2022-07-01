@@ -1,3 +1,6 @@
+## `V3.0.1`
+
+ - Now current active file shows up in the pick list when using `Custom Commands: Open Custom Command Pallet`
 ## `V3.0.0`
 
 - renamed `custom-command-runner.settings.scriptsPath` to `custom-command-runner.settings.paths`

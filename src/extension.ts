@@ -24,7 +24,8 @@ const executeCustomCommand = async (args?: any) => {
 
   let scriptFilePaths, selectedCommand;
 
-  scriptFilePaths = [].concat(args?.fsPath || Settings.paths);
+  scriptFilePaths = [editorProps.variables.file].concat(args?.fsPath || Settings.paths);
+  scriptFilePaths = [...new Set(scriptFilePaths)].filter(Boolean) as string[];
 
   selectedCommand = await Prompt.pickACommand(scriptFilePaths, output, true);
   if (!selectedCommand) return;

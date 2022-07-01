@@ -2,7 +2,7 @@
 	"name": "custom-command-runner",
 	"displayName": "Custom Command Runner",
 	"description": "Run node script file, methods and shell commands from command pallet",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"publisher": "Thinker",
 	"icon": "images/ccrLogo.png",
 	"engines": {
