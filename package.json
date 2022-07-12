@@ -2,7 +2,7 @@
 	"name": "custom-command-runner",
 	"displayName": "Custom Command Runner",
 	"description": "Run node script file, methods and shell commands from command pallet",
-	"version": "3.0.1",
+	"version": "4.0.0",
 	"publisher": "Thinker",
 	"icon": "images/ccrLogo.png",
 	"engines": {
@@ -35,21 +35,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:custom-command-runner.openCustomCommands",
-		"onCommand:custom-command-runner.runCustomCommands"
+		"onCommand:custom-command-runner.customCommands"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "custom-command-runner.openCustomCommands",
-				"title": "Open Custom Command Pallet",
-				"category": "Custom Commands"
-			},
-			{
-				"command": "custom-command-runner.runCustomCommands",
-				"title": "Run Custom Commands",
-				"category": "Custom Commands"
+				"command": "custom-command-runner.customCommands",
+				"title": "Custom Commands"
 			}
 		],
 		"configuration": {
@@ -74,13 +67,13 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"command": "custom-command-runner.runCustomCommands",
+					"command": "custom-command-runner.customCommands",
 					"group": "custom-command-runner"
 				}
 			],
 			"editor/context": [
 				{
-					"command": "custom-command-runner.runCustomCommands",
+					"command": "custom-command-runner.customCommands",
 					"group": "custom-command-runner"
 				}
 			]

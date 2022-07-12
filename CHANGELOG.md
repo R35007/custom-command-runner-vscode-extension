@@ -1,6 +1,12 @@
+## `V4.0.0`
+
+- Renamed `Custom Commands: Open Custom Command Pallet` to `Custom Commands`
+- Now last used command will show at the top as recently used commands
+
 ## `V3.0.1`
 
- - Now current active file shows up in the pick list when using `Custom Commands: Open Custom Command Pallet`
+- Now current active file shows up in the pick list when using `Custom Commands: Open Custom Command Pallet`
+
 ## `V3.0.0`
 
 - renamed `custom-command-runner.settings.scriptsPath` to `custom-command-runner.settings.paths`
@@ -14,7 +20,7 @@
 - Added predefined variables which can be used too run the shell commands
   Example :
   ```js
-  exports.Run_File = "node ${file}" // can use predefined variables
+  exports.Run_File = "node ${file}"; // can use predefined variables
   ```
 
 ## `V1.0.0`

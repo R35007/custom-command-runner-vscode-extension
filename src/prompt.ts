@@ -1,8 +1,13 @@
+/* eslint-disable curly */
 import * as vscode from "vscode";
+import { LocalStorageService } from './LocalStorageService';
 import { Settings } from "./Settings";
 import { BROWSE_FILE, CommandTypes, getFilesList, PathDetails } from './utils';
 
 export class Prompt {
+
+  static storageManager: LocalStorageService;
+
   static getFilePath = async () => {
     const defaultUri = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri : undefined;
     const filePaths = await vscode.window.showOpenDialog({
@@ -13,9 +18,13 @@ export class Prompt {
     return filePath;
   };
 
-  static pickACommand = async (scriptPaths: string[] = [], output: vscode.OutputChannel, shouldBrowseFile: boolean = false) => {
+  static pickACommand = async (context: vscode.ExtensionContext, scriptPaths: string[] = [], output: vscode.OutputChannel, shouldBrowseFile: boolean = false) => {
     try {
       output.appendLine("Picking a Command...");
+
+      if (!Prompt.storageManager) {
+        Prompt.storageManager = new LocalStorageService(context.workspaceState);
+      }
 
       const scriptFiles = scriptPaths.reduce((res, scriptPath) => res.concat(
         getFilesList(scriptPath)
@@ -29,11 +38,11 @@ export class Prompt {
 
       const filesList = scriptFiles.map(file => ({
         label: file.fileName,
-        description: file.filePath,
+        // description: file.filePath,
         value: Settings.runFileCommand,
         filePath: file.filePath,
         type: CommandTypes.FILE
-      }))
+      }));
 
       const { functionalCommands, shellCommands } = scriptFiles.reduce((result, file) => {
         try {
@@ -45,20 +54,20 @@ export class Prompt {
             const command = {
               label: commandName.replace(/( |_|-){1,}/g, ' ').trim(),
               value: code,
-              description: file.filePath,
+              // description: file.filePath,
               filePath: file.filePath,
               type: typeof code === "string" ? CommandTypes.SHELL : CommandTypes.FUNCTIONAL
-            }
+            };
             if (typeof command.value === 'string') result.shellCommands.push(command);
             if (typeof command.value === 'function') result.functionalCommands.push(command);
-          })
+          });
 
           return result;
         } catch (err) {
-          console.log(err);
-          return result
+          return result;
         }
-      }, { functionalCommands: [], shellCommands: [] } as any)
+      }, { functionalCommands: [], shellCommands: [] } as any);
+
 
       const quickPickList = [
         { label: "Run File", kind: vscode.QuickPickItemKind.Separator },
@@ -70,7 +79,13 @@ export class Prompt {
         { kind: vscode.QuickPickItemKind.Separator }
       ];
 
-      if (shouldBrowseFile) quickPickList.push({ label: BROWSE_FILE, value: BROWSE_FILE })
+      const previousSelectedCommand = Prompt.storageManager.getValue("selectedCommand", null);
+      if (previousSelectedCommand && shouldBrowseFile) {
+        quickPickList.unshift(previousSelectedCommand);
+        quickPickList.unshift({ label: "recently used", kind: vscode.QuickPickItemKind.Separator },);
+      }
+
+      if (shouldBrowseFile) quickPickList.push({ label: BROWSE_FILE, value: BROWSE_FILE });
 
       const selectedCommand: any = await vscode.window.showQuickPick(quickPickList, {
         placeHolder: 'Please select command or File to execute',
@@ -81,6 +96,8 @@ export class Prompt {
         output.appendLine("Selected Command: undefined");
         return;
       };
+
+      Prompt.storageManager.setValue("selectedCommand", selectedCommand);
 
       output.appendLine(`\nSelected Command: ${JSON.stringify(selectedCommand, null, 2)}\n`);
 
